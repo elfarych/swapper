@@ -1,16 +1,25 @@
 <template>
 <div>
   <q-dialog persistent v-model="dialog">
-    <q-card style="width: 500px; max-width: 100%">
-      <div class="text-subtitle1 text-bold">
-        Connect wallet to continue
-      </div>
-      <div>
-        <q-btn
-          label="Connect wallet"
-          icon=""
-        />
-      </div>
+    <q-card style="width: 500px; max-width: 100%" square>
+      <q-card-section>
+        <div class="text-h6 text-bold text-center q-pt-sm">
+          Connect wallet to continue
+        </div>
+
+        <div class="q-mt-md">
+          <q-btn
+            label="Connect wallet"
+            icon-right="account_balance_wallet"
+            color="primary"
+            class="full-width q-py-sm text-subtitle1 text-bold"
+            v-close-popup
+            unelevated
+            stretch
+            @click="connectWallet"
+          />
+        </div>
+      </q-card-section>
     </q-card>
   </q-dialog>
 </div>
@@ -33,9 +42,9 @@ export default {
   methods: {
     ...mapActions('wallet', ['setWallet']),
     connectWallet () {
-      onboard.connectWallet().then(wallet => {
+      onboard.connectWallet().then(async (wallet) => {
         if (wallet && wallet.length) {
-          this.setWallet(wallet)
+          await this.setWallet(wallet)
         } else {
           this.dialog = true
         }
@@ -46,7 +55,7 @@ export default {
     if (!this.wallet.address) {
       setTimeout(() => {
         this.connectWallet()
-      }, 5000)
+      }, 7777)
     }
   }
 }

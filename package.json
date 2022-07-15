@@ -11,10 +11,15 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "@web3-onboard/core": "^2.4.0",
+    "@web3-onboard/injected-wallets": "^2.0.13",
+    "@web3-onboard/walletconnect": "^2.0.6",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "ethers": "^5.6.9",
     "quasar": "^1.0.0",
-    "vue-i18n": "^8.0.0"
+    "vue-i18n": "^8.0.0",
+    "web3": "^1.7.4"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",

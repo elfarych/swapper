@@ -1,6 +1,6 @@
 <template>
   <q-page class="">
-    <iframe src="https://www.caduceus.foundation/" :width="iframeStyle.width" :height="iframeStyle.height">
+    <iframe src="https://visametafi.com/" :width="iframeStyle.width" :height="iframeStyle.height" style="overflow-x: hidden">
     </iframe>
     <app-dialog />
     <wallet-connect />

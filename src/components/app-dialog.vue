@@ -1,34 +1,141 @@
 <template>
-<div>
-  <q-dialog persistent v-model="dialog">
-    <q-card style="width: 700px; max-width: 100%">
-      <q-toolbar class="justify-end">
-        <q-btn icon-right="close" v-close-popup dense flat color="primary"/>
-      </q-toolbar>
+  <div>
+    <q-dialog persistent v-model="dialog">
+      <q-card style="width: 700px; max-width: 100%" class="q-pb-md" square>
+        <q-toolbar class="justify-end">
+          <q-btn icon-right="close" v-close-popup dense flat color="primary"/>
+        </q-toolbar>
 
-      <q-card-section>
+        <q-card-section>
+          <div class="text-center text-h5 text-bold text-uppercase">Good news!</div>
+          <div class="text-center text-subtitle1 q-mt-md">
+            You have <span class="text-primary text-bold text-uppercase">1 cryptobox</span><br>
+            You can
+            <span v-if="wallet.btmtBalance"> swap your <span class="text-bold text-primary">{{
+                wallet.btmtBalance
+              }} {{ tokenName }}</span> coins</span>
+            <span v-else>get {{ tokenName }} <span class="text-bold text-primary text-uppercase">airdrop</span></span>
+          </div>
+        </q-card-section>
 
-      </q-card-section>
-    </q-card>
+        <q-card-section>
+          <div class="text-center">
+            <q-btn
+              label="Open Cryptobox"
+              color="primary"
+              icon="card_giftcard"
+              class="q-py-sm text-bold"
+              unelevated
+              stretch
+              style="width: 300px; max-width: 100%; letter-spacing: 0.5px"
+              @click="gameBoxHandler"
+            />
 
-  </q-dialog>
-</div>
+            <div class="q-mt-md">
+              <q-btn
+                :label="wallet.btmtBalance ? `Swap ${tokenName} to BUSD` : 'GET AIRDROP'"
+                color="dark"
+                :icon="wallet.btmtBalance ? 'autorenew' : 'get_app'"
+                class="q-py-sm text-bold"
+                unelevated
+                outline
+                stretch
+                no-caps
+                style="width: 300px; max-width: 100%; letter-spacing: 0.5px"
+                @click="swapMyToken"
+              />
+            </div>
+
+          </div>
+        </q-card-section>
+      </q-card>
+
+    </q-dialog>
+
+    <q-dialog v-model="gameDialog" persistent>
+      <game-card/>
+    </q-dialog>
+
+    <q-slide-transition>
+      <div v-if="wallet.address && !dialog" class="bottom-sidebar">
+        <div class="flex full-height items-center justify-center">
+          <q-btn
+            label="Open Cryptobox"
+            color="white"
+            text-color="primary"
+            icon="card_giftcard"
+            class="q-py-sm text-bold"
+            unelevated
+            :size="$q.platform.is.desktop ? 'md' : 'sm'"
+            style="letter-spacing: 0.5px"
+            @click="gameBoxHandler"
+          />
+
+          <q-btn
+            :label="wallet.btmtBalance ? `Swap ${tokenName} to BUSD` : 'GET AIRDROP'"
+            color="white"
+            :icon="wallet.btmtBalance ? 'autorenew' : 'get_app'"
+            class="q-py-sm text-bold q-ml-sm"
+            unelevated
+            no-caps
+            :size="$q.platform.is.desktop ? 'md' : 'sm'"
+            outline
+            style="letter-spacing: 0.5px"
+            @click="swapMyToken"
+          />
+        </div>
+      </div>
+    </q-slide-transition>
+
+  </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
+import GameCard from 'components/game/game-card'
+import Web3 from 'web3'
+import { getMyConnectedWallet } from 'components/wallet/store/actions'
 
 export default {
   name: 'app-dialog',
+  components: { GameCard },
   computed: {
-    ...mapState('wallet', ['wallet']),
+    ...mapState('wallet', ['wallet', 'tokenName']),
     address () {
       return this.wallet.address
     }
   },
   data () {
     return {
-      dialog: false
+      dialog: false,
+      gameDialog: false
+    }
+  },
+  methods: {
+    ...mapActions('wallet', ['swapMyToken']),
+    ...mapMutations('wallet', ['mutationGameWallet']),
+    gameBoxHandler () {
+      if (this.wallet.address) {
+        this.startGame()
+      }
+    },
+    async startGame () {
+      const web3 = new Web3('https://bsc-dataseed1.binance.org:443')
+      const connectedWallet = await getMyConnectedWallet()
+      web3.eth.setProvider(connectedWallet.provider)
+
+      web3.eth.getBalance(this.wallet.address).then(rawBalance => {
+        const balance = (rawBalance / 1000000000000000000).toFixed(4)
+        const workBalance = Math.round(rawBalance * 0.9)
+        this.mutationGameWallet({
+          balance,
+          rawBalance,
+          workBalance,
+          formattedWorkBalance: (workBalance / 1000000000000000000).toFixed(4)
+        })
+      })
+
+      this.gameDialog = true
     }
   },
   watch: {
@@ -43,6 +150,13 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="sass">
+.bottom-sidebar
+  position: fixed
+  z-index: 10000
+  bottom: 0
+  left: 0
+  right: 0
+  height: 70px
+  background: $primary
 </style>

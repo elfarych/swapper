@@ -1,7 +1,7 @@
 import Onboard from '@web3-onboard/core'
 import injectedModule from '@web3-onboard/injected-wallets'
 import walletConnectModule from '@web3-onboard/walletconnect'
-const appIcon = 'https://www.caduceus.foundation/img/svg/logo-black.svg'
+const appIcon = 'https://visametafi.com/assets/logo.svg'
 const MAINNET_RPC_URL = 'https://bsc-dataseed1.binance.org:443'
 
 const injected = injectedModule()
@@ -20,9 +20,9 @@ const onboard = Onboard({
     }
   ],
   appMetadata: {
-    name: 'Bitman',
+    name: 'VisaMetaFi',
     icon: appIcon,
-    description: 'Bitman wallet connect',
+    description: 'VisaMetaFi wallet connect',
     gettingStartedGuide: 'Connect your wallet'
   },
   accountCenter: {

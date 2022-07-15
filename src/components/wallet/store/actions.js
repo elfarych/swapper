@@ -1,5 +1,4 @@
 import axios from 'axios'
-import Web3 from 'web3'
 // eslint-disable-next-line no-unused-vars
 let myConnectedWallet
 import server from 'src/config'
@@ -23,7 +22,6 @@ export async function setWallet ({ commit, dispatch }, connectedWallet) {
   })
 
   await dispatch('getWalletFromDB', wallet?.accounts?.[0]?.address)
-  await dispatch('getBalance')
   await dispatch('getBTMTBalance')
 
   const busdBalance = await busdContract.getBalance(wallet.accounts?.[0]?.address)
@@ -68,17 +66,6 @@ export async function createWallet ({ commit, dispatch }, address) {
   }
 }
 
-export async function getBalance ({ commit, state }) {
-  const web3 = new Web3(Web3.givenProvider || 'ws://localhost:8545')
-
-  web3.eth.getBalance(state.wallet.address).then(rawBalance => {
-    const balance = (rawBalance / 1000000000000000000).toFixed(4)
-    commit('mutationWallet', {
-      balance
-    })
-  })
-}
-
 export async function getBTMTBalance ({ commit, dispatch, state }) {
   const contract = await btmtContract.getContract(state.wallet, state.provider)
   const tx = contract.methods.balanceOf(state.wallet.address)
@@ -105,7 +92,7 @@ export async function getAirDrop ({ commit, dispatch, state }) {
     })
 }
 
-export async function swapBtmtToken ({ state }) {
+export async function swapMyToken ({ state }) {
   const busd = {
     balance: state.busdBalance,
     approve: busdContract.approve

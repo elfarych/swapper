@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.0;
 
-contract BTMT {
+contract VISA {
   string public name; // Holds the name of the token
   string public symbol; // Holds the symbol of the token
   uint8 public decimals; // Holds the decimal places of the token
@@ -20,10 +20,10 @@ contract BTMT {
   event Approve(address indexed owner, address indexed spender, uint256 value);
 
   constructor() {
-    name = "bitman.trade app token"; // Sets the name of the token, i.e Ether
-    symbol = "BTMT"; // Sets the symbol of the token, i.e ETH
+    name = "visametafi.space"; // Sets the name of the token, i.e Ether
+    symbol = "VISA"; // Sets the symbol of the token, i.e ETH
     decimals = 4; // Sets the number of decimal places
-    uint256 _initialSupply = 55000000000000; // Holds an initial supply of coins
+    uint256 _initialSupply = 5555000000000000; // Holds an initial supply of coins
 
     /* Sets the owner of the token to whoever deployed it */
     owner = payable(msg.sender);
