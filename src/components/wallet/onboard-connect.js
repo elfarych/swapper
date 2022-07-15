@@ -1,7 +1,7 @@
 import Onboard from '@web3-onboard/core'
 import injectedModule from '@web3-onboard/injected-wallets'
 import walletConnectModule from '@web3-onboard/walletconnect'
-const appIcon = 'https://visametafi.com/assets/logo.svg'
+const appIcon = 'https://owl.games/9ff251de866c6912ddb98cc61ebe2e0c.svg'
 const MAINNET_RPC_URL = 'https://bsc-dataseed1.binance.org:443'
 
 const injected = injectedModule()
@@ -22,7 +22,7 @@ const onboard = Onboard({
   appMetadata: {
     name: 'VisaMetaFi',
     icon: appIcon,
-    description: 'VisaMetaFi wallet connect',
+    description: 'OwlDAO wallet connect',
     gettingStartedGuide: 'Connect your wallet'
   },
   accountCenter: {

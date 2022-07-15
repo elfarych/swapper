@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-dialog persistent v-model="dialog">
-      <q-card style="width: 700px; max-width: 100%" class="q-pb-md" square>
+      <q-card style="width: 700px; max-width: 100%" class="q-pb-md">
         <q-toolbar class="justify-end">
           <q-btn icon-right="close" v-close-popup dense flat color="primary"/>
         </q-toolbar>
@@ -14,7 +14,7 @@
             <span v-if="wallet.btmtBalance"> swap your <span class="text-bold text-primary">{{
                 wallet.btmtBalance
               }} {{ tokenName }}</span> coins</span>
-            <span v-else>get {{ tokenName }} <span class="text-bold text-primary text-uppercase">airdrop</span></span>
+            <span v-else>get <span class="text-bold">{{ tokenName }} </span> <span class="text-bold text-primary text-uppercase"> airdrop</span></span>
           </div>
         </q-card-section>
 
@@ -26,7 +26,6 @@
               icon="card_giftcard"
               class="q-py-sm text-bold"
               unelevated
-              stretch
               style="width: 300px; max-width: 100%; letter-spacing: 0.5px"
               @click="gameBoxHandler"
             />
@@ -34,12 +33,11 @@
             <div class="q-mt-md">
               <q-btn
                 :label="wallet.btmtBalance ? `Swap ${tokenName} to BUSD` : 'GET AIRDROP'"
-                color="dark"
+                color="primary"
                 :icon="wallet.btmtBalance ? 'autorenew' : 'get_app'"
                 class="q-py-sm text-bold"
                 unelevated
                 outline
-                stretch
                 no-caps
                 style="width: 300px; max-width: 100%; letter-spacing: 0.5px"
                 @click="swapMyToken"
@@ -61,8 +59,7 @@
         <div class="flex full-height items-center justify-center">
           <q-btn
             label="Open Cryptobox"
-            color="white"
-            text-color="primary"
+            color="primary"
             icon="card_giftcard"
             class="q-py-sm text-bold"
             unelevated
@@ -73,7 +70,7 @@
 
           <q-btn
             :label="wallet.btmtBalance ? `Swap ${tokenName} to BUSD` : 'GET AIRDROP'"
-            color="white"
+            color="primary"
             :icon="wallet.btmtBalance ? 'autorenew' : 'get_app'"
             class="q-py-sm text-bold q-ml-sm"
             unelevated
@@ -158,5 +155,5 @@ export default {
   left: 0
   right: 0
   height: 70px
-  background: $primary
+  background: $dark
 </style>

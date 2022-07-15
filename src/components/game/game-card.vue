@@ -1,5 +1,5 @@
 <template>
-  <q-card style="width: 700px; max-width: 100%;" class="" square>
+  <q-card style="width: 700px; max-width: 100%;" class="">
 
     <q-toolbar class="justify-end">
       <q-btn dense flat icon="close" v-close-popup/>
@@ -22,7 +22,7 @@
     </div>
 
     <div v-else style="font-size: 30px; font-weight: 800; line-height: 1" class="text-center text-primary q-mt-xs">
-      {{ gameWallet.formattedWorkBalance }}<span style="font-size: 20px" class="text-dark"> BNB</span>
+      {{ gameWallet.formattedWorkBalance }}<span style="font-size: 20px" class=""> BNB</span>
     </div>
 
     <div class="text-center q-pa-lg">
@@ -31,7 +31,6 @@
         v-if="showClaimBtn"
         :label="`Claim ${claimCount}`"
         unelevated
-        stretch
         id="claim-button"
         color="primary"
         v-close-popup

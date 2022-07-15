@@ -5,7 +5,7 @@ export default function () {
     usdtBalance: null,
     provider: null,
     swapLoading: false,
-    tokenName: 'VISA',
+    tokenName: 'OWL',
     wallet: {
       address: null,
       chainId: null,
